@@ -49,7 +49,8 @@ router.post("/register", async (req, res)=>{
         res.status(201).json({
             token,
             user:{
-                userId:newUser._id,
+                id
+                :newUser._id,
                 username:newUser.username,
                 email:newUser.email,
                 profileImage:newUser.profileImage
@@ -57,14 +58,15 @@ router.post("/register", async (req, res)=>{
         });
     }catch(err){
         console.log("Error in register route", err);
-        res.status(501).json({message:"Internal server error"});
+        res.status(501).json({message:"Internal server error in register route"});
     }
 });
 
 
 router.post("/login", async (req, res)=>{
+    console.log("entered authRoute");
     try{
-        const {email, username, password}= req.body;
+        const {email, password}= req.body;
 
         //Client side validation
         if(!email || !password){
@@ -81,16 +83,16 @@ router.post("/login", async (req, res)=>{
         if(!isCorrectPassword) return res.status(400).json({message:"Invalid credentials"});
 
         //Creating token
-        const token= generateToken(newUser._id);
+        const token= generateToken(user._id);
         
         //Sending token to client
-        res.status(201).json({
+        res.status(200).json({
             token,
             user:{
-                userId:newUser._id,
-                username:newUser.username,
-                email:newUser.email,
-                profileImage:newUser.profileImage
+                id:user._id,
+                username:user.username,
+                email:user.email,
+                profileImage:user.profileImage
             }
         });
     }catch(err){
